@@ -22,6 +22,7 @@ MagicMirror² frontend-only module that displays age rows for multiple people wi
 - `showTitle` (boolean)
 - `separator` (string): default `" — "`
 - `showOldSuffix` (boolean)
+- Inline bar layout: auto-enabled for `top_bar` and `bottom_bar`, uses ` | ` between people and hides the title
 - `locale` (string): `en` or `ms`
 - `updateInterval` (number ms): periodic refresh, default ~1 hour
 - `updateAtMidnight` (boolean): update at local midnight
@@ -98,3 +99,4 @@ MagicMirror² frontend-only module that displays age rows for multiple people wi
 - Date of birth must be `YYYY-MM-DD`.
 - Ages are calculated using calendar-aware year/month/day logic (leap years and month lengths handled).
 - The module updates at local midnight when `updateAtMidnight` is true.
+- `top_bar` and `bottom_bar` positions render inline with a ` | ` separator between people and no title.

@@ -4,6 +4,21 @@
   gap: 6px;
 }
 
+.age-widget--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0;
+}
+
+.age-widget--inline .age-widget__row {
+  display: inline-flex;
+}
+
+.age-widget__inline-separator {
+  opacity: 0.6;
+}
+
 .age-widget__title {
   font-size: 18px;
   font-weight: 600;

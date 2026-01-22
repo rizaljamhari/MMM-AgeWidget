@@ -62,11 +62,12 @@ Module.register("MMM-AgeWidget", {
 
   getDom: function () {
     const wrapper = document.createElement("div");
-    wrapper.className = "age-widget";
+    const isInline = this._isBarPosition();
+    wrapper.className = isInline ? "age-widget age-widget--inline" : "age-widget";
 
     const locale = this._getLocale();
 
-    if (this.config.showTitle && this.config.title) {
+    if (this.config.showTitle && this.config.title && !isInline) {
       const title = document.createElement("div");
       title.className = "age-widget__title";
       title.textContent = this.config.title;
@@ -74,7 +75,7 @@ Module.register("MMM-AgeWidget", {
     }
 
     if (!Array.isArray(this.config.people) || this.config.people.length === 0) {
-      const empty = document.createElement("div");
+      const empty = document.createElement(isInline ? "span" : "div");
       empty.className = "age-widget__row age-widget__row--empty";
       empty.textContent = locale.noPeople;
       wrapper.appendChild(empty);
@@ -83,9 +84,9 @@ Module.register("MMM-AgeWidget", {
 
     const today = this._getLocalDateOnly(new Date());
 
-    this.config.people.forEach((person) => {
-      const row = document.createElement("div");
-      row.className = "age-widget__row";
+    this.config.people.forEach((person, index) => {
+      const row = document.createElement(isInline ? "span" : "div");
+      row.className = isInline ? "age-widget__row age-widget__inline-item" : "age-widget__row";
 
       const name = document.createElement("span");
       name.className = "age-widget__name";
@@ -129,6 +130,13 @@ Module.register("MMM-AgeWidget", {
       row.appendChild(sep);
       row.appendChild(text);
       wrapper.appendChild(row);
+
+      if (isInline && index < this.config.people.length - 1) {
+        const pipe = document.createElement("span");
+        pipe.className = "age-widget__inline-separator";
+        pipe.textContent = " | ";
+        wrapper.appendChild(pipe);
+      }
     });
 
     return wrapper;
@@ -151,6 +159,11 @@ Module.register("MMM-AgeWidget", {
 
   _getLocalDateOnly: function (date) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  },
+
+  _isBarPosition: function () {
+    const position = this.data && this.data.position;
+    return position === "top_bar" || position === "bottom_bar";
   },
 
   _parseISODate: function (value) {
