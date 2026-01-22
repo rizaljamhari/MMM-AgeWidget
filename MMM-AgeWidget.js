@@ -16,7 +16,9 @@ Module.register("MMM-AgeWidget", {
     updateAtMidnight: true,
     highlightBirthday: true,
     showBirthdayMessage: false,
-    birthdayEmoji: "🎂"
+    birthdayEmoji: "🎂",
+    inline: null,
+    textAlign: "left"
   },
 
   start: function () {
@@ -62,8 +64,9 @@ Module.register("MMM-AgeWidget", {
 
   getDom: function () {
     const wrapper = document.createElement("div");
-    const isInline = this._isBarPosition();
+    const isInline = this._isInline();
     wrapper.className = isInline ? "age-widget age-widget--inline" : "age-widget";
+    wrapper.style.textAlign = this._resolveTextAlign();
 
     const locale = this._getLocale();
 
@@ -164,6 +167,21 @@ Module.register("MMM-AgeWidget", {
   _isBarPosition: function () {
     const position = this.data && this.data.position;
     return position === "top_bar" || position === "bottom_bar";
+  },
+
+  _isInline: function () {
+    if (typeof this.config.inline === "boolean") {
+      return this.config.inline;
+    }
+    return this._isBarPosition();
+  },
+
+  _resolveTextAlign: function () {
+    const value = typeof this.config.textAlign === "string" ? this.config.textAlign.toLowerCase() : "";
+    if (value === "left" || value === "right" || value === "center") {
+      return value;
+    }
+    return "left";
   },
 
   _parseISODate: function (value) {
