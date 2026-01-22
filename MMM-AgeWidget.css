@@ -1,0 +1,54 @@
+.age-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.age-widget__title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.age-widget__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+}
+
+.age-widget__name {
+  font-weight: 600;
+}
+
+.age-widget__separator {
+  opacity: 0.7;
+  padding: 0 4px;
+}
+
+.age-widget__text {
+  opacity: 0.95;
+}
+
+.age-widget__row--empty,
+.age-widget__row--error {
+  opacity: 0.6;
+}
+
+.age-widget__row--birthday {
+  animation: age-widget-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes age-widget-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
