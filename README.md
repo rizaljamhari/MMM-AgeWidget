@@ -12,6 +12,10 @@ MagicMirror² frontend-only module that displays age rows for multiple people wi
 **Module config options**
 
 - `people` (array): list of people
+- `events` (array): list of global anniversaries/custom events
+  - `name` (string)
+  - `date` (string) in `YYYY-MM-DD`
+  - `emoji` (optional string)
   - `name` (string)
   - `dob` (string) in `YYYY-MM-DD`
   - `mode` (optional string): `adult` | `child` | `baby`
@@ -96,9 +100,25 @@ MagicMirror² frontend-only module that displays age rows for multiple people wi
 }
 ```
 
+
+### 5) Global anniversaries / custom events
+
+```js
+{
+  module: "MMM-AgeWidget",
+  position: "bottom_bar",
+  config: {
+    events: [
+      { name: "Rizal & Yuna", date: "2019-06-01", emoji: "🎉" },
+      { name: "Company Founded", date: "2012-03-15" }
+    ]
+  }
+}
+```
+
 ## Notes
 
-- Date of birth must be `YYYY-MM-DD`.
+- Date values must be `YYYY-MM-DD` for people and events.
 - Ages are calculated using calendar-aware year/month/day logic (leap years and month lengths handled).
 - The module updates at local midnight when `updateAtMidnight` is true.
 - `top_bar` and `bottom_bar` positions render inline with a ` | ` separator between people and no title (override with `inline`).

@@ -18,7 +18,8 @@ Module.register("MMM-AgeWidget", {
     showBirthdayMessage: false,
     birthdayEmoji: "🎂",
     inline: null,
-    textAlign: "left"
+    textAlign: "left",
+    events: []
   },
 
   start: function () {
@@ -141,6 +142,52 @@ Module.register("MMM-AgeWidget", {
         wrapper.appendChild(pipe);
       }
     });
+
+    if (Array.isArray(this.config.events) && this.config.events.length > 0) {
+      this.config.events.forEach((event, index) => {
+        const row = document.createElement(isInline ? "span" : "div");
+        row.className = isInline ? "age-widget__row age-widget__inline-item age-widget__row--event" : "age-widget__row age-widget__row--event";
+
+        const name = document.createElement("span");
+        name.className = "age-widget__name";
+        name.textContent = event.name || locale.unknown;
+
+        const sep = document.createElement("span");
+        sep.className = "age-widget__separator";
+        sep.textContent = this.config.separator;
+
+        const textNode = document.createElement("span");
+        textNode.className = "age-widget__text";
+
+        const eventDate = this._parseISODate(event.date);
+        if (!eventDate) {
+          row.classList.add("age-widget__row--error");
+          textNode.textContent = locale.invalidDob;
+        } else {
+          const yearsSince = this._calculateAge(eventDate, today).years;
+          const isEventDay = this._isBirthday(eventDate, today);
+          if (isEventDay) {
+            row.classList.add("age-widget__row--birthday");
+            const emoji = event.emoji || this.config.birthdayEmoji;
+            textNode.textContent = `${emoji} ${name.textContent} ${locale.turns} ${yearsSince} ${this._label("year", yearsSince)} ${locale.today}`;
+          } else {
+            textNode.textContent = `${yearsSince} ${this._label("year", yearsSince)} ${locale.yearsSince}`;
+          }
+        }
+
+        row.appendChild(name);
+        row.appendChild(sep);
+        row.appendChild(textNode);
+        wrapper.appendChild(row);
+
+        if (isInline && index < this.config.events.length - 1) {
+          const pipe = document.createElement("span");
+          pipe.className = "age-widget__inline-separator";
+          pipe.textContent = " | ";
+          wrapper.appendChild(pipe);
+        }
+      });
+    }
 
     return wrapper;
   },
@@ -324,6 +371,7 @@ Module.register("MMM-AgeWidget", {
         justBorn: "just born",
         turns: "turns",
         today: "today!",
+        yearsSince: "years since",
         pluralize: true,
         partSeparator: ", ",
         units: {
@@ -340,6 +388,7 @@ Module.register("MMM-AgeWidget", {
         justBorn: "baru lahir",
         turns: "genap",
         today: "hari ini!",
+        yearsSince: "tahun sejak",
         pluralize: false,
         partSeparator: ", ",
         units: {
