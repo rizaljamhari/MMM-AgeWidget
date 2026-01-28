@@ -16,6 +16,8 @@ MagicMirror² frontend-only module that displays age rows for multiple people wi
   - `name` (string)
   - `date` (string) in `YYYY-MM-DD`
   - `emoji` (optional string)
+  - `text` (optional string): template for normal days, supports `{name}` and `{years}`
+  - `todayText` (optional string): template for event day, supports `{name}` and `{years}`
   - `name` (string)
   - `dob` (string) in `YYYY-MM-DD`
   - `mode` (optional string): `adult` | `child` | `baby`
@@ -109,8 +111,8 @@ MagicMirror² frontend-only module that displays age rows for multiple people wi
   position: "bottom_bar",
   config: {
     events: [
-      { name: "Rizal & Yuna", date: "2019-06-01", emoji: "🎉" },
-      { name: "Company Founded", date: "2012-03-15" }
+      { name: "Rizal & Yuna", date: "2019-06-01", emoji: "🎉", text: "{years} years together" },
+      { name: "Company Founded", date: "2012-03-15", text: "{years} years since founding", todayText: "🎉 {name} turns {years} today!" }
     ]
   }
 }

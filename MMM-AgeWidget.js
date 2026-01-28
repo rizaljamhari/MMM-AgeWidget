@@ -169,9 +169,23 @@ Module.register("MMM-AgeWidget", {
           if (isEventDay) {
             row.classList.add("age-widget__row--birthday");
             const emoji = event.emoji || this.config.birthdayEmoji;
-            textNode.textContent = `${emoji} ${name.textContent} ${locale.turns} ${yearsSince} ${this._label("year", yearsSince)} ${locale.today}`;
+            if (event.todayText) {
+              textNode.textContent = this._formatTemplate(event.todayText, {
+                name: name.textContent,
+                years: yearsSince
+              });
+            } else {
+              textNode.textContent = `${emoji} ${name.textContent} ${locale.turns} ${yearsSince} ${this._label("year", yearsSince)} ${locale.today}`;
+            }
           } else {
-            textNode.textContent = `${yearsSince} ${this._label("year", yearsSince)} ${locale.yearsSince}`;
+            if (event.text) {
+              textNode.textContent = this._formatTemplate(event.text, {
+                name: name.textContent,
+                years: yearsSince
+              });
+            } else {
+              textNode.textContent = `${yearsSince} ${this._label("year", yearsSince)} ${locale.yearsSince}`;
+            }
           }
         }
 
@@ -229,6 +243,18 @@ Module.register("MMM-AgeWidget", {
       return value;
     }
     return "left";
+  },
+
+  _formatTemplate: function (template, data) {
+    if (typeof template !== "string") {
+      return "";
+    }
+    return template.replace(/\{(\w+)\}/g, (match, key) => {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        return String(data[key]);
+      }
+      return match;
+    });
   },
 
   _parseISODate: function (value) {
@@ -371,7 +397,7 @@ Module.register("MMM-AgeWidget", {
         justBorn: "just born",
         turns: "turns",
         today: "today!",
-        yearsSince: "years since",
+        yearsSince: "since",
         pluralize: true,
         partSeparator: ", ",
         units: {
@@ -388,7 +414,7 @@ Module.register("MMM-AgeWidget", {
         justBorn: "baru lahir",
         turns: "genap",
         today: "hari ini!",
-        yearsSince: "tahun sejak",
+        yearsSince: "sejak",
         pluralize: false,
         partSeparator: ", ",
         units: {
